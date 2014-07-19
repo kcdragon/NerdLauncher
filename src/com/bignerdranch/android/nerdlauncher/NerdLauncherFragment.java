@@ -66,11 +66,21 @@ public class NerdLauncherFragment extends ListFragment {
     private ArrayAdapter<ResolveInfo> getActivitiesArrayAdapter(List<ResolveInfo> activities) {
 	return new ArrayAdapter<ResolveInfo>(getActivity(), android.R.layout.simple_list_item_1, activities) {
 	    public View getView(int pos, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+                    convertView = getActivity().getLayoutInflater()
+                        .inflate(R.layout.icon_with_text_list_item, null);
+                }
+
 		PackageManager pm = getActivity().getPackageManager();
-		TextView textView = (TextView) super.getView(pos, convertView, parent);
-		ResolveInfo resolveInfo = getItem(pos);
+                ResolveInfo resolveInfo = getItem(pos);
+
+		TextView textView = (TextView) convertView.findViewById(R.id.icon_with_text_list_item_text);
 		textView.setText(resolveInfo.loadLabel(pm));
-		return textView;
+
+                ImageView imageView = (ImageView) convertView.findViewById(R.id.icon_with_text_list_item_icon);
+                imageView.setImageDrawable(resolveInfo.loadIcon(pm));
+
+		return convertView;
 	    }
 	};
     }
